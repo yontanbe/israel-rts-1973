@@ -16,8 +16,10 @@ function Game(sc,stage,diffKey,seed,headless){
  fp.forEach((p,i)=>G.fields.push({x:p[0],y:p[1],r:50,amt:i<3?2200:1500,max:i<3?2200:1500}));
  // rock clusters (blocked cells), kept off base, fields and enemy base
  const keep=[{x:bx+60,y:by+60,r:330},...G.fields.map(f=>({x:f.x,y:f.y,r:90})),...(stage.foeBase||[]).map(b=>({x:b[1]*CELL+40,y:b[2]*CELL+40,r:160}))];
- const nClust=Math.round(G.gw*G.gh/260);
- for(let i=0;i<nClust;i++){let cx=R()*G.gw|0,cy=R()*G.gh|0;const len=3+R()*9|0;for(let k=0;k<len;k++){cx+=(R()*3|0)-1;cy+=(R()*3|0)-1;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){const x=cx+dx,y=cy+dy;if(x<2||y<0||x>=G.gw-2||y>=G.gh)continue;const p={x:x*CELL+12,y:y*CELL+12};if(keep.some(k=>d2(k,p)<k.r))continue;G.rock[y*G.gw+x]=1;}}}
+ const MK=(typeof MAPS!=='undefined')&&MAPS[stage.map];
+ if(MK){for(let y=0;y<G.gh;y++)for(let x=2;x<G.gw-2;x++){const mx=Math.min(MK.w-1,x*MK.w/G.gw|0),my=Math.min(MK.h-1,y*MK.h/G.gh|0);if(MK.m[my*MK.w+mx]!=='1')continue;const p={x:x*CELL+12,y:y*CELL+12};if(keep.some(k=>d2(k,p)<k.r))continue;G.rock[y*G.gw+x]=1;}}
+ else{const nClust=Math.round(G.gw*G.gh/260);
+ for(let i=0;i<nClust;i++){let cx=R()*G.gw|0,cy=R()*G.gh|0;const len=3+R()*9|0;for(let k=0;k<len;k++){cx+=(R()*3|0)-1;cy+=(R()*3|0)-1;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){const x=cx+dx,y=cy+dy;if(x<2||y<0||x>=G.gw-2||y>=G.gh)continue;const p={x:x*CELL+12,y:y*CELL+12};if(keep.some(k=>d2(k,p)<k.r))continue;G.rock[y*G.gw+x]=1;}}}}
  G.addB('hq',bx,by,'me',true);G.addB('depot',bx,by+5*CELL,'me',true);
  G.addU('truck','me',bx+150,by+60);G.addU('shot','me',bx+170,by-10);G.addU('shot','me',bx+190,by+30);G.addU('jeep','me',bx+160,by+100);
  (stage.foeBase||[]).forEach(b=>{const e=G.addB(b[0],b[1]*2*CELL/2*1,b[2]*CELL,'foe',true);});
@@ -44,7 +46,7 @@ P.findPath=function(sx,sy,tx,ty){const G=this,gw=G.gw,gh=G.gh;let s=[sx/CELL|0,s
  const N=gw*gh,g=new Float32Array(N).fill(1e9),came=new Int32Array(N).fill(-1),closed=new Uint8Array(N);const si=s[1]*gw+s[0],ti=t[1]*gw+t[0];g[si]=0;
  const heap=[[0,si]];const push=(f,i)=>{heap.push([f,i]);let k=heap.length-1;while(k>0){const p=(k-1)>>1;if(heap[p][0]<=heap[k][0])break;[heap[p],heap[k]]=[heap[k],heap[p]];k=p;}};
  const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let k=0;for(;;){const l=2*k+1,r=l+1;let m=k;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===k)break;[heap[m],heap[k]]=[heap[k],heap[m]];k=m;}}return top;};
- let it=0;while(heap.length&&it++<6000){const [,i]=pop();if(i===ti)break;if(closed[i])continue;closed[i]=1;const x=i%gw,y=i/gw|0;
+ let it=0;while(heap.length&&it++<25000){const [,i]=pop();if(i===ti)break;if(closed[i])continue;closed[i]=1;const x=i%gw,y=i/gw|0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const nx=x+dx,ny=y+dy;if(!G.free(nx,ny)&&!(nx*1+ny*gw===ti))continue;if(dx&&dy&&(!G.free(x+dx,y)||!G.free(x,y+dy)))continue;const ni=ny*gw+nx;const ng=g[i]+(dx&&dy?1.414:1);if(ng<g[ni]){g[ni]=ng;came[ni]=i;push(ng+Math.hypot(nx-t[0],ny-t[1]),ni);}}}
  if(came[ti]<0&&ti!==si)return null;const path=[];let c=ti;while(c!==si&&c>=0){path.push({x:(c%gw)*CELL+12,y:(c/gw|0)*CELL+12});c=came[c];}path.reverse();
  // smooth: drop waypoints with clear line of sight

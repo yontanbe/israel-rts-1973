@@ -1,4 +1,4 @@
-global.window=global;require('../scenarios.js');require('../engine.js');
+global.window=global;require('../maps.js');require('../scenarios.js');require('../engine.js');
 const sc=SCENARIOS[2],N=10,out={};
 const wins=(st,d)=>{let w=0;for(let s=1;s<=N;s++)if(runSim(d,s*7919,st.id).result==='win')w++;return w;};
 for(const id of (process.argv[2]||'2,3,4,5,6,7,8,9,10').split(',').map(Number)){const st=sc.stages[id-1];let lo=0.3,hi=2.5;
