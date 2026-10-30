@@ -101,7 +101,7 @@ function unitImg(u){const d=u.def;let im=IMG[d.img];if(d.tint==='foe')im=tinted(
 const GLW={};function glow(c,r=32){const k=c+r;if(GLW[k])return GLW[k];const cv=document.createElement('canvas');cv.width=cv.height=r*2;const x=cv.getContext('2d');const g=x.createRadialGradient(r,r,0,r,r,r);g.addColorStop(0,`rgba(${c},1)`);g.addColorStop(.25,`rgba(${c},.5)`);g.addColorStop(1,`rgba(${c},0)`);x.fillStyle=g;x.fillRect(0,0,r*2,r*2);return GLW[k]=cv;}
 let sparks=[];const LOWFX=matchMedia('(pointer:coarse)').matches;function addGlow(c,x,y,r,a){ctx.globalAlpha=Math.max(0,Math.min(1,a));ctx.drawImage(glow(c),x-r,y-r,r*2,r*2);}
 function draw(){ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#000';ctx.fillRect(0,0,cv.width,cv.height);ctx.save();ctx.setTransform(Z*DPR,0,0,Z*DPR,-Math.round(cam.x*Z*DPR),-Math.round(cam.y*Z*DPR));
- {const w=Math.min(WV(),G.W-cam.x),h=Math.min(HV(),G.H-cam.y);ctx.drawImage(bg,cam.x*BGS,cam.y*BGS,w*BGS,h*BGS,cam.x,cam.y,w,h);}
+ {const w=Math.min(WV(),G.W-cam.x),h=Math.min(HV(),G.H-cam.y);ctx.drawImage(bg,cam.x*BGS,cam.y*BGS,w*BGS,h*BGS,cam.x,cam.y,w,h);}drawWater();
  const inV=(x,y,m=80)=>x>cam.x-m&&x<cam.x+WV()+m&&y>cam.y-m&&y<cam.y+HV()+m;
  for(const f of G.fields){if(!inV(f.x,f.y))continue;const a=Math.max(.15,f.amt/f.max);const rg=ctx.createRadialGradient(f.x,f.y,2,f.x,f.y,f.r);rg.addColorStop(0,`rgba(240,200,70,${.7*a})`);rg.addColorStop(1,'rgba(240,200,70,0)');ctx.fillStyle=rg;ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,7);ctx.fill();
   for(let i=0;i<Math.ceil(6*a);i++){const an=i*1.1,dd=f.r*.45;const bx=f.x+Math.cos(an)*dd,by=f.y+Math.sin(an)*dd*.7;ctx.fillStyle='#3d4a2a';ctx.fillRect(bx-6,by-4,12,8);ctx.fillStyle='#6b7a45';ctx.fillRect(bx-6,by-4,12,2);ctx.fillStyle='#b33';ctx.fillRect(bx-1,by-3,2,2);}}
@@ -233,4 +233,14 @@ let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();
 $('inst').onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$('inst').classList.add('hide');};
 if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 $('zin').onclick=()=>zoomAt(1.2,VW/2,VH/2);$('zout').onclick=()=>zoomAt(1/1.2,VW/2,VH/2);$('music').onclick=()=>{ac();setMusic(!musicOn);};setMusic(musicOn);setMute(muted);window.__game=()=>G;window.__cam=cam;window.__Z=()=>Z;menu();
+// water shimmer (gfx level 2): water cells detected from painted bg, cheap additive glints
+let WAT=[],GLS=null,WBG=null;const WC=16;
+function calcWater(){WAT=[];try{const cw=Math.ceil(G.W/WC),ch=Math.ceil(G.H/WC),c=document.createElement('canvas');c.width=cw;c.height=ch;const x=c.getContext('2d');x.drawImage(bg,0,0,cw,ch);const d=x.getImageData(0,0,cw,ch).data;
+ for(let j=0;j<ch;j++)for(let i=0;i<cw;i++){const k=(j*cw+i)*4,r=d[k],g=d[k+1],b=d[k+2];if((b>r+25&&b>g-5&&b>60)||(b>r+10&&b>=g&&b>70))WAT.push([i*WC,j*WC,Math.random()*6.28]);}}catch(e){WAT=[];}
+ if(!GLS){GLS=document.createElement('canvas');GLS.width=24;GLS.height=8;const q=GLS.getContext('2d'),gr=q.createRadialGradient(12,4,0,12,4,12);gr.addColorStop(0,'rgba(255,255,245,.95)');gr.addColorStop(.4,'rgba(200,235,255,.45)');gr.addColorStop(1,'rgba(200,235,255,0)');q.fillStyle=gr;q.save();q.scale(1,1/3);q.fillRect(0,0,24,24);q.restore();}}
+function drawWater(){if(WBG!==bg){WBG=bg;calcWater();}if(!WAT.length)return;const t=G.t*.06,x0=cam.x-WC,y0=cam.y-WC,x1=cam.x+WV(),y1=cam.y+HV(),st=LOWFX?2:1;ctx.save();ctx.globalCompositeOperation='lighter';
+ for(let n=0;n<WAT.length;n+=st){const w=WAT[n];if(w[0]<x0||w[0]>x1||w[1]<y0||w[1]>y1)continue;const ph=w[2]+t,a=Math.sin(ph)*.5+.5;if(a<.35)continue;ctx.globalAlpha=(a-.35)*.55;const ox=(Math.sin(ph*.7+w[1]*.05)*.5+.5)*WC,oy=(Math.cos(ph*.5+w[0]*.04)*.5+.5)*WC;ctx.drawImage(GLS,w[0]+ox-6,w[1]+oy-2,12+a*8,3+a*2);}
+ ctx.restore();ctx.globalAlpha=1;}
+window.__wat=()=>WAT.length;
 })();
+
