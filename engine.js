@@ -16,7 +16,7 @@ function Game(sc,stage,diffKey,seed,headless){
  fp.forEach((p,i)=>G.fields.push({x:p[0],y:p[1],r:50,amt:i<3?2200:1500,max:i<3?2200:1500}));
  // rock clusters (blocked cells), kept off base, fields and enemy base
  const keep=[{x:bx+60,y:by+60,r:330},...G.fields.map(f=>({x:f.x,y:f.y,r:90})),...(stage.foeBase||[]).map(b=>({x:b[1]*CELL+40,y:b[2]*CELL+40,r:160}))];
- const MK=(typeof MAPS!=='undefined')&&MAPS[stage.map];
+ const MK=(typeof MAPS!=='undefined')&&(MAPS['s'+stage.id]||MAPS[stage.map]);
  if(MK){for(let y=0;y<G.gh;y++)for(let x=2;x<G.gw-2;x++){const mx=Math.min(MK.w-1,x*MK.w/G.gw|0),my=Math.min(MK.h-1,y*MK.h/G.gh|0);if(MK.m[my*MK.w+mx]!=='1')continue;const p={x:x*CELL+12,y:y*CELL+12};if(keep.some(k=>d2(k,p)<k.r))continue;G.rock[y*G.gw+x]=1;}}
  else{const nClust=Math.round(G.gw*G.gh/260);
  for(let i=0;i<nClust;i++){let cx=R()*G.gw|0,cy=R()*G.gh|0;const len=3+R()*9|0;for(let k=0;k<len;k++){cx+=(R()*3|0)-1;cy+=(R()*3|0)-1;for(let dy=0;dy<2;dy++)for(let dx=0;dx<2;dx++){const x=cx+dx,y=cy+dy;if(x<2||y<0||x>=G.gw-2||y>=G.gh)continue;const p={x:x*CELL+12,y:y*CELL+12};if(keep.some(k=>d2(k,p)<k.r))continue;G.rock[y*G.gw+x]=1;}}}}
