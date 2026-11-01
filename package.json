@@ -1,0 +1,17 @@
+{
+  "name": "israel-rts-1973",
+  "version": "3.0.0",
+  "description": "מבצע מדבר 1973: browser RTS (PWA) about the Yom Kippur War",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "node tools/serve.js 8080",
+    "test": "node tools/gen-sw.js --check && node --test tests/engine.test.js tests/account.test.js",
+    "e2e": "node tests/e2e.js",
+    "sim": "node sim.js 1,2,3,4,5,6,7,8,9,10 20",
+    "build:sw": "node tools/gen-sw.js",
+    "build:sprites": "python3 tools/mkbuild.py",
+    "package": "node tools/package.js"
+  },
+  "engines": { "node": ">=18" }
+}

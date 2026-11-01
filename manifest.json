@@ -1,2 +1,5 @@
-{"name":"מבצע מדבר · 1973","short_name":"מבצע מדבר","start_url":"./index.html","scope":"./","display":"fullscreen","orientation":"landscape","background_color":"#1b1712","theme_color":"#1b1712","lang":"he","dir":"rtl",
-"icons":[{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{"id":"./","name":"מבצע מדבר · 1973","short_name":"מבצע מדבר","description":"אסטרטגיה בזמן אמת על מלחמת יום הכיפורים. 10 שלבים, עובד גם בלי אינטרנט.",
+"start_url":"./index.html","scope":"./","display":"fullscreen","display_override":["fullscreen","standalone"],"orientation":"landscape","background_color":"#1b1712","theme_color":"#1b1712","lang":"he","dir":"rtl","categories":["games","strategy"],
+"icons":[{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}],
+"shortcuts":[{"name":"המשך לשחק","short_name":"שחק","url":"./index.html#play","icons":[{"src":"icons/icon-192.png","sizes":"192x192"}]}],
+"screenshots":[{"src":"assets/shots/s1.jpg","sizes":"1366x768","type":"image/jpeg","form_factor":"wide","label":"שלב 1: הבלימה ברמת הגולן"},{"src":"assets/shots/s4.jpg","sizes":"1366x768","type":"image/jpeg","form_factor":"wide","label":"סיני: קרב השריון"}]}

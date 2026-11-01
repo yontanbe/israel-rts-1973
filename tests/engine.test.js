@@ -1,0 +1,27 @@
+// Engine tests: node --test tests/
+const test=require('node:test'),assert=require('node:assert');
+global.window=global;require('../maps.js');require('../scenarios.js');require('../engine.js');
+const SC=SCENARIOS.find(s=>s.id==='yk1973');const stage=id=>SC.stages.find(s=>s.id===id);
+const mk=(id,d='normal',seed=11)=>new Game(SC,stage(id),d,seed,true);
+const place=(G,t)=>{const hq=G.ents.find(e=>e.type==='hq'&&e.side==='me');G.q.build={t,p:0,need:1,done:true};for(let r=0;r<200;r++){const x=hq.x+120+(r%10)*24,y=hq.y-200+((r/10)|0)*24;if(G.placeBuild(x,y)){const b=G.ents[G.ents.length-1];b.dep=1;return b;}}G.q.build=null;return null;};
+test('campaign has 10 stages with dates, places and story',()=>{assert.equal(SC.stages.length,10);for(const st of SC.stages){assert.ok(st.brief&&st.outro&&st.goal&&st.date&&st.place,'stage '+st.id);}});
+test('10 player buildings and every image exists',()=>{const fs=require('fs');const mine=Object.entries(SC.buildings).filter(([k,d])=>!d.foeOnly);assert.ok(mine.length>=10,'have '+mine.length);
+ for(const [,d] of Object.entries(SC.buildings))assert.ok(fs.existsSync(__dirname+'/../assets/s/'+d.img+'.png'),d.img);});
+test('every stage builds and starts with its setup',()=>{for(const st of SC.stages){const G=mk(st.id);assert.ok(G.ents.some(e=>e.type==='hq'&&e.side==='me'));for(const [t] of st.startB)assert.ok(G.ents.some(e=>e.type===t&&e.side==='me'),'stage '+st.id+' '+t);
+ for(const e of G.ents.filter(e=>e.kind==='b'&&e.side==='me')){for(let y=e.y/24|0;y<(e.y+e.h)/24;y++)for(let x=e.x/24|0;x<(e.x+e.w)/24;x++)assert.ok(!G.rock[y*G.gw+x],'building on rock stage '+st.id);}}});
+test('prerequisites gate buildings',()=>{const G=mk(6);G.res=9999;G.ents=G.ents.filter(e=>e.type!=='radar');G.rebuildGrid();assert.equal(G.queueBuild('aa'),false);assert.ok(place(G,'radar'));assert.equal(G.queueBuild('aa'),true);});
+test('locked buildings cannot be built in early stages',()=>{const G=mk(1);G.res=9999;assert.equal(G.queueBuild('artillery'),false);assert.equal(G.queueBuild('barracks'),true);});
+test('dug-in tank position destroys an approaching T-55 on its own',()=>{const G=mk(1);G.ents=G.ents.filter(e=>e.kind==='b');G.rebuildGrid();G.addB('factory',G.ents[0].x,G.ents[0].y+300,'me',true);G.rebuildGrid();const pb=place(G,'pillbox');assert.ok(pb);
+ const t=G.addU('t55','foe',pb.cx+140,pb.cy);t.state='idle';for(let i=0;i<1500&&t.hp>0;i++)G.step();assert.ok(t.hp<=0,'tank survived with '+t.hp);});
+test('barracks trains an infantry squad',()=>{const G=mk(1);G.res=5000;assert.ok(place(G,'barracks'));assert.ok(G.queueUnit('inf'));for(let i=0;i<600;i++)G.step();assert.ok(G.ents.some(e=>e.type==='inf'&&e.side==='me'));});
+test('artillery splash hits several units',()=>{const G=mk(5);G.ents=G.ents.filter(e=>e.kind==='b');G.rebuildGrid();const hq=G.ents[0];const a=G.addU('m109','me',hq.cx+150,hq.cy);const f=[0,1,2].map(i=>{const u=G.addU('btr','foe',hq.cx+400+i*14,hq.cy+i*10);u.state='idle';u.hp=u.max=2000;return u;});
+ for(let i=0;i<400;i++)G.step();assert.ok(f.filter(u=>u.hp<2000).length>=2,'splash hits '+f.filter(u=>u.hp<2000).length);});
+test('veterancy: kills raise rank',()=>{const G=mk(1);const u=G.addU('shot','me',100,100);for(let i=0;i<3;i++){const t=G.addU('btr','foe',300,300);G.damage(t,99999,u);}assert.equal(u.rank,1);for(let i=0;i<4;i++){const t=G.addU('btr','foe',300,300);G.damage(t,99999,u);}assert.equal(u.rank,2);});
+test('Hawk battery intercepts a MiG strike',()=>{const G=mk(6);G.ents=G.ents.filter(e=>e.side==='me'||e.kind==='b');G.rebuildGrid();const aa=place(G,'aa');assert.ok(aa);const u=G.addU('shot','me',aa.cx+60,aa.cy+60);const hp=u.hp;
+ G.air.strikes.push({side:'foe',x:aa.cx+100,y:u.y,tx:u.x,ty:u.y,vx:-8,done:0,img:'mig21'});for(let i=0;i<40;i++)G.step();assert.equal(u.hp,hp);assert.equal(G.stats.intercepts,1);});
+test('airfield makes air strikes cheaper and faster',()=>{const G=mk(5);G.res=9999;const c0=G.airCost(),d0=G.airCd();place(G,'airfield');assert.ok(G.airCost()<c0&&G.airCd()<d0);});
+test('save and load keep units, buildings, ranks and progress',()=>{const G=mk(4);G.res=4321;const u=G.ents.find(e=>e.type==='shot');u.rank=2;u.xp=8;for(let i=0;i<300;i++)G.step();global.SCENARIOS=SCENARIOS;
+ const s=G.serialize();const H=Game.load(s);assert.equal(H.res,G.res);assert.equal(H.ents.length,G.ents.length);assert.equal(H.ents.find(e=>e.id===u.id).rank,2);assert.equal(H.wave,G.wave);assert.throws(()=>Game.load('{}'));});
+test('stars: win gives 1 to 3 stars',()=>{const G=mk(1);G.over='win';G.t=60;G.stats.losses=0;assert.equal(G.stars(),3);G.stats.losses=99;G.t=99999;assert.equal(G.stars(),1);G.over='lose';assert.equal(G.stars(),0);});
+test('night stages reduce sight',()=>{const G=mk(3);const u=G.ents.find(e=>e.type==='jeep');assert.ok(G.sightOf(u)<u.def.sight);});
+test('bot can win stage 1 on easy (smoke balance check)',()=>{let w=0;for(let s=1;s<=4;s++)if(runSim('easy',s*7919,1).result==='win')w++;assert.ok(w>=3,'wins '+w+'/4');});

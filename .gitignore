@@ -1,4 +1,5 @@
-node_modules/
 *.log
 __pycache__/
 assets/src/
+dist/
+node_modules/

@@ -1,0 +1,19 @@
+name: release zip
+# Push a tag like v3.0.0 (or run manually) to attach an offline zip of the game to a GitHub Release.
+on:
+  push: { tags: ['v*'] }
+  workflow_dispatch:
+permissions: { contents: write }
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm test && node tools/package.js
+      - uses: actions/upload-artifact@v4
+        with: { name: mivtza-midbar-1973, path: dist/mivtza-midbar-1973.zip }
+      - if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with: { files: dist/mivtza-midbar-1973.zip }
