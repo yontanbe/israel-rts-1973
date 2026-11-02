@@ -9,9 +9,9 @@
 <!-- ===== landing page ===== -->
 <div id="home" class="home">
  <header class="nav"><div class="logo">⚔ מבצע מדבר <small>1973</small></div>
-  <nav><a href="#features">המשחק</a><a href="#story">העלילה</a><a href="#gallery">צילומים</a><a href="#install">התקנה</a></nav>
+  <nav><a href="#features">המשחק</a><a href="#story">העלילה</a><a href="#people">דמויות</a><a href="#gallery">צילומים</a><a href="#install">התקנה</a></nav>
   <button id="hAcc" class="chip">👤 התחברות</button></header>
- <section class="hero"><div class="heroin">
+ <section class="hero"><div class="slides" id="slides"></div><div class="heroin">
   <h1>מבצע מדבר <span>1973</span></h1>
   <p class="lead">אסטרטגיה בזמן אמת על מלחמת יום הכיפורים. בונים בסיס, אוספים דלק, מגייסים שריון וחי״ר, ומחזיקים את הקו מהגולן ועד מעבר לתעלה.</p>
   <div class="cta"><button id="hPlay" class="big gold">▶ שחק עכשיו</button><button id="hCont" class="big hide"></button><button id="hReg" class="big">הרשמה חינם</button><button class="big instbtn" id="hInst">📲 התקן</button></div>
@@ -27,6 +27,7 @@
  <section id="story" class="sec story2"><img src="assets/s/advisor_officer.png" alt="סא״ל אהרון גלעדי">
   <div><h2>העלילה</h2><p id="hIntro"></p><p class="dim">לצידך קצין המבצעים סא״ל אהרון גלעדי (דמות בדיונית). כל שלב נפתח בתדריך עם מפה ונסגר בדיווח שמוביל לשלב הבא. המערכה מסתיימת בהפסקת האש ובדקה של זיכרון.</p>
    <ol class="arc"><li>בלימה בגולן</li><li>עמק הבכא</li><li>חדירה בלילה</li><li>קו המעוזים</li><li>קרב השריון</li><li>מתקפת הנגד</li><li>הגבעות</li><li>הצומת העיקש</li><li>הצליחה</li><li>מעבר לתעלה</li></ol></div></section>
+ <section id="people" class="sec"><h2>הדמויות</h2><div class="people" id="peopleList"></div></section>
  <section id="gallery" class="sec"><h2>מתוך המשחק</h2><div class="gal" id="gal"></div></section>
  <section id="install" class="sec"><h2>התקנה</h2><div class="feat inst">
   <div><b>📱 אנדרואיד וכרום</b>לוחצים על ״התקן״ למעלה, או בתפריט של כרום על ״הוספה למסך הבית״. המשחק נפתח במסך מלא ועובד בלי אינטרנט.</div>
@@ -60,12 +61,12 @@
 <div id="menu" class="scr bgart hide"><div class="panel"><div class="mtop"><button id="toHome" class="sm">🏠 דף הבית</button><button id="who" class="sm chip"></button></div><h1>⚔ מבצע מדבר ⚔</h1><div class="sub">אסטרטגיה בזמן אמת · בחר מערכה ושלב</div><div id="cards"></div>
 <div class="row"><button id="cont" class="big hide">▶ המשך משחק שמור</button><button id="inst" class="big hide instbtn">📲 התקן כאפליקציה</button><button id="mute1" class="big">🔊 צליל</button></div>
 <div class="note">כל הדמויות והיחידות בדיוניות · קרבות בין כלים צבאיים בלבד · פועל גם בלי אינטרנט</div></div></div>
-<div id="brief" class="scr bgart hide"><div class="panel wide"><div class="adv"><img id="advimg" alt=""><div><b id="advname"></b><div id="advrole" class="sub"></div></div></div>
+<div id="brief" class="scr bgart hide"><div class="panel wide"><img id="bill" class="bill" alt=""><div class="adv"><img id="advimg" alt=""><div><b id="advname"></b><div id="advrole" class="sub"></div></div></div>
 <h2 id="bt"></h2><div id="bdate" class="bdate"></div><div class="bwrap"><canvas id="bmap" width="420" height="236"></canvas><div class="legend"><span><i style="background:#3c8cff"></i>הבסיס שלך</span><span><i style="background:#e6322a"></i>בסיס אויב</span><span><i style="background:#ffbe28"></i>סוללת SAM</span><span>➜ כיוון ההתקפה</span></div></div>
-<div id="bb" class="story"></div><div id="bg" class="goal"></div><div class="row"><button class="big" id="bback">חזרה</button><button class="big gold" id="go">יוצאים לדרך</button></div></div></div>
-<div id="end" class="scr bgart hide"><div class="panel wide"><h1 id="et"></h1><div id="estars" class="stars"></div><div id="ehint" class="dim small"></div><div id="eb" class="sub"></div><div class="adv"><img id="advimg2" alt=""><div id="eo" class="story"></div></div><div id="memorial" class="memorial hide"></div>
+<div id="bb" class="story"></div><div id="b2" class="b2 hide"><img id="b2img" alt=""><div><b id="b2name"></b><div id="b2txt"></div></div></div><div id="bg" class="goal"></div><div class="row"><button class="big" id="bback">חזרה</button><button class="big gold" id="go">יוצאים לדרך</button></div></div></div>
+<div id="end" class="scr bgart hide"><div class="panel wide"><img id="eill" class="bill hide" alt=""><h1 id="et"></h1><div id="estars" class="stars"></div><div id="ehint" class="dim small"></div><div id="eb" class="sub"></div><div class="adv"><img id="advimg2" alt=""><div id="eo" class="story"></div></div><div id="memorial" class="memorial hide"></div>
 <div class="row"><button class="big gold" id="next">לשלב הבא ▶</button><button class="big" id="retry">↻ נסה שוב</button><button class="big" id="tomenu">לתפריט</button></div></div></div>
-<div id="wrap" class="hide"><div id="view"><canvas id="c"></canvas><div id="grade"></div><div id="msg"></div><div id="tbar"><button id="tAll">בחר כוח</button><button id="tNone">בטל בחירה</button><button id="tAir" class="hide">✈ תקיפה</button></div></div>
+<div id="wrap" class="hide"><div id="view"><canvas id="c"></canvas><div id="grade"></div><div id="msg"></div><div id="tbar"><button id="tAll">בחר כוח</button><button id="tNone">בטל בחירה</button><button id="tAir" class="hide">✈ תקיפה</button><button id="tSmoke" class="hide">💨 עשן</button></div><div id="radio" class="radio hide"><img id="rimg" alt=""><div><b id="rname"></b><div id="rtxt"></div></div></div><div id="tut" class="tut hide"><b>🎓 הדרכה</b><div id="tuttxt"></div><button id="tutskip" class="sm">דלג על ההדרכה</button></div></div>
 <div id="hud"><div class="hrow"><b id="stname"></b><button id="pause" class="sm">⏸</button></div><div id="topbar"><span id="res"></span><span id="ucount"></span><span id="clock"></span></div><div id="obj"></div><div id="wave"></div>
 <canvas id="mini"></canvas>
 <div id="airbox" class="hide"><button id="air" class="cam wideb">✈ תקיפה אווירית<span id="aircd"></span></button></div>

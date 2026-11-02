@@ -6,7 +6,7 @@ window.SCENARIOS = [
   advisor:{name:'סא״ל אהרון גלעדי', role:'קצין המבצעים של החטיבה (דמות בדיונית)', img:'assets/s/advisor_officer.png'},
   intro:'יום כיפור, אוקטובר 1973. השקט של החג נשבר. אתה מפקד כוח שריון בדיוני, ולצידך קצין המבצעים אהרון גלעדי, ותיק ששירת בכל המלחמות הקודמות. המשימה: לבלום, להחזיק, ולהפוך את הקערה על פיה.',
   stages:[
-   {id:1,name:'הגולן: הבלימה',map:'golan',k:1.09,W:56,H:36,obj:'hold',waves:6,firstWave:45,waveGap:40,startRes:600,mix:[['t55','t55','btr'],['t55','t62','btr'],['t62','t62','t55','btr']],
+   {id:1,name:'הגולן: הבלימה',map:'golan',k:1.15,W:56,H:36,obj:'hold',waves:6,firstWave:45,waveGap:40,startRes:600,mix:[['t55','t55','btr'],['t55','t62','btr'],['t62','t62','t55','btr']],
     unlock:['truck','jeep','shot','tiran'],
     brief:'"שקט, ואז אש. הם חוצים את הקו בכל הגזרה. אין לנו תגבורת לפני הלילה. תאסוף דלק מהשדות, תבנה מפעל שריון ותחזיק את המפקדה. אם היא נופלת, הגזרה נפתחת."',
     goal:'לעמוד ב-6 גלי שריון ולשמור על המפקדה',
@@ -16,12 +16,12 @@ window.SCENARIOS = [
     brief:'"בעמק הזה כל רכס שווה זהב. הם יבואו בגלים, ואנחנו נירה מלמעלה. כל טנק שנעצור כאן הוא טנק שלא יגיע לגליל. אל תרדפו אחריהם אל תוך העמק."',
     goal:'להשמיד 25 כלי אויב בלי לאבד את המפקדה',
     outro:'העמק מלא עשן ופלדה שרופה. בקשר נשמעת הודעה שחיכינו לה: "המילואים עולים לרמה." גלעדי מחייך לראשונה מאז הבוקר.'},
-   {id:3,name:'הגזרה הדרומית: חדירה',map:'golan',k:0.99,W:64,H:40,obj:'destroy',waves:4,firstWave:60,waveGap:55,startRes:700,foeBase:[['factory',52,8],['depot',55,26],['hq',54,16]],
+   {id:3,name:'הגזרה הדרומית: חדירה',map:'golan',k:1.0,W:64,H:40,obj:'destroy',waves:4,firstWave:60,waveGap:55,startRes:700,foeBase:[['factory',52,8],['depot',55,26],['hq',54,16]],
     mix:[['t55','btr','btr'],['t55','t62','btr']],unlock:['truck','jeep','shot','tiran'],
     brief:'"כוח אויב התבסס בגזרה הדרומית והקים בסיס הצטיידות. כל עוד המפעל שלהם עובד, הם ימשיכו לשלוח כלים. הערפל עבה: תשלח ג׳יפ סיור קודם, ואחר כך תכה בכל הכוח."',
     goal:'להשמיד את כל מבני האויב בגזרה',
     outro:'בסיס ההצטיידות שותק. בגזרה הדרומית חזר השקט, ופיקוד הצפון מעביר את החטיבה שלנו דרומה. "סיני," אומר גלעדי, "שם החול מכסה הכל."'},
-   {id:4,name:'סואץ: המעוזים',map:'sinai',k:1.3,W:64,H:40,obj:'hold',waves:8,firstWave:40,waveGap:36,startRes:600,mix:[['t55','btr','btr'],['t55','t62','btr'],['t62','t62','btr','btr']],
+   {id:4,name:'סואץ: המעוזים',map:'sinai',k:0.8,W:64,H:40,obj:'hold',waves:8,firstWave:40,waveGap:36,startRes:600,mix:[['t55','btr','btr'],['t55','t62','btr'],['t62','t62','btr','btr']],
     unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"קו המעוזים לאורך התעלה מותקף. הצוותים שם מחזיקים בציפורניים. הגיע אלינו גדוד מגח, מהיר ומדויק. נחזיק עד שכוחות המילואים ישלימו את הפריסה."',
     goal:'לעמוד ב-8 גלים בחזית התעלה',
@@ -31,12 +31,12 @@ window.SCENARIOS = [
     brief:'"זה הקרב הגדול. מאות כלים מול מאות כלים. לראשונה יש לנו סיוע אווירי: פאנטום יכול לתקוף ריכוז שריון אחד בכל פעם. תשמור אותו לרגע הנכון."',
     goal:'לבלום 10 גלים. סיוע אווירי זמין (כפתור "תקיפה אווירית")',
     outro:'המתקפה הגדולה נשברה. הכף מתחילה לנטות. בצפון, החטיבות כבר נערכות למתקפת נגד, ואנחנו נקראים לחזור לרמה.'},
-   {id:6,name:'הגולן: מתקפת הנגד',map:'golan',k:0.53,W:70,H:42,obj:'destroy',waves:5,firstWave:70,waveGap:50,startRes:900,air:true,foeAir:true,foeBase:[['hq',60,18],['factory',58,8],['factory',58,30],['depot',64,26]],
+   {id:6,name:'הגולן: מתקפת הנגד',map:'golan',k:0.55,W:70,H:42,obj:'destroy',waves:5,firstWave:70,waveGap:50,startRes:900,air:true,foeAir:true,foeBase:[['hq',60,18],['factory',58,8],['factory',58,30],['depot',64,26]],
     mix:[['t62','t55','btr'],['t62','t62','btr']],unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"עכשיו אנחנו תוקפים. הקו הסגול מאחורינו, והבסיסים שלהם לפנינו. שים לב: למיג-21 שלהם יש עדיין שיניים. תפזר את הכוח ואל תשאיר טור צפוף."',
     goal:'להשמיד את כל מבני האויב',
     outro:'הקו נפרץ. הכוחות מתקדמים מזרחה, אל עבר הגבעות השולטות. "מי שמחזיק את הגבעות, מחזיק את הגזרה," מזכיר גלעדי.'},
-   {id:7,name:'הדרך לגבעות',map:'golan',k:0.47,W:72,H:44,obj:'destroy',waves:6,firstWave:60,waveGap:45,startRes:800,air:true,foeAir:true,foeBase:[['factory',62,6],['sam',66,20],['factory',62,34],['hq',58,20]],
+   {id:7,name:'הדרך לגבעות',map:'golan',k:0.75,W:72,H:44,obj:'destroy',waves:6,firstWave:60,waveGap:45,startRes:800,air:true,foeAir:true,foeBase:[['factory',62,6],['sam',66,20],['factory',62,34],['hq',58,20]],
     mix:[['t62','t62','btr'],['t62','t62','t55','btr']],unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"שלוש עמדות מבוצרות על הגבעות. חיל האוויר השיג עליונות בשמיים, אבל על הקרקע זה עלינו. תתקוף מכמה כיוונים כדי לפצל את ההגנה."',
     goal:'להשמיד את העמדות המבוצרות על הגבעות',
@@ -46,12 +46,12 @@ window.SCENARIOS = [
     brief:'"צומת הדרכים הזה פותח את הדרך לתעלה. האויב יודע את זה ויזרוק עלינו הכל. זה הלילה הקשה ביותר של המערכה. תחזיק את הצומת עד הבוקר."',
     goal:'להחזיק את הצומת מול 11 גלים',
     outro:'עם שחר, הצומת עדיין שלנו. המחיר כבד, והשקט שאחרי הקרב כבד יותר. גלעדי שותק ארוכות ואז אומר רק: "הדרך לתעלה פתוחה."'},
-   {id:9,name:'הצליחה',map:'sinai',k:0.44,W:74,H:44,obj:'destroy',waves:7,firstWave:50,waveGap:38,startRes:900,air:true,foeAir:true,foeBase:[['hq',64,20],['factory',62,8],['sam',68,32],['factory',66,28],['sam',56,12]],
+   {id:9,name:'הצליחה',map:'sinai',k:0.5,W:74,H:44,obj:'destroy',waves:7,firstWave:50,waveGap:38,startRes:900,air:true,foeAir:true,foeBase:[['hq',64,20],['factory',62,8],['sam',68,32],['factory',66,28],['sam',56,12]],
     mix:[['t62','t62','btr'],['t62','t62','t62','btr']],unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"הגשר הוקם בלילה. עכשיו צריך להרחיב את ראש הגשר ולהשמיד את הבסיסים שמאיימים עליו. כל שעה שאנחנו מחזיקים כאן משנה את המלחמה."',
     goal:'להשמיד את בסיסי האויב שמעבר לתעלה',
     outro:'ראש הגשר יציב. בפעם הראשונה מזה שבועיים, היוזמה בידינו לגמרי. נותר מאמץ אחרון לפני שהמדינאים יכריזו על הפסקת אש.'},
-   {id:10,name:'מעבר לתעלה',map:'sinai',k:0.31,W:80,H:48,obj:'destroy',waves:9,firstWave:55,waveGap:32,startRes:1000,air:true,foeAir:true,foeBase:[['hq',70,22],['factory',66,6],['factory',66,40],['sam',74,12],['sam',74,34],['hq',60,30]],
+   {id:10,name:'מעבר לתעלה',map:'sinai',k:0.53,W:80,H:48,obj:'destroy',waves:9,firstWave:55,waveGap:32,startRes:1000,air:true,foeAir:true,foeBase:[['hq',70,22],['factory',66,6],['factory',66,40],['sam',74,12],['sam',74,34],['hq',60,30]],
     mix:[['t62','t62','t55','btr'],['t62','t62','t62','btr','btr']],unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"זה המאמץ האחרון. השמדת מערך הפיקוד שלהם תביא להפסקת אש בתנאים שלנו. אני גאה בכל אחד מהצוותים. עוד פעם אחת, ואז הביתה."',
     goal:'להשמיד את כל מערך הפיקוד של האויב',
@@ -85,8 +85,10 @@ window.SCENARIOS = [
   radar:{name:'מכ״ם',w:3,h:3,hp:500,cost:350,img:'radar',sight:16,req:'depot',radar:true,tip:'רואה רחוק ומסמן את כל האויבים על המפה הקטנה'},
   repair:{name:'סדנת שדה',w:4,h:4,hp:850,cost:400,img:'repair_bay',sight:6,req:'factory',heal:true,tip:'מתקן כלים ומבנים בסביבה, מהר פי שלושה מהמפקדה'},
   aa:{name:'סוללת הוק',w:4,h:4,hp:650,cost:480,img:'aa_site',sight:9,req:'radar',aa:600,tip:'מיירטת מיגים בטווח רחב'},
-  artillery:{name:'עמדת ארטילריה',w:3,h:3,hp:600,cost:520,img:'artillery',sight:7,req:'radar',wpn:{dmg:46,rng:330,rof:170,splash:46,arc:1,min:70},tur:'magach',turLen:1.5,tip:'ירי ארוך טווח עם רסס. צריכה מכ״ם או יחידה שרואה את המטרה'},
+  artillery:{name:'עמדת ארטילריה',w:3,h:3,hp:600,cost:520,img:'artillery',sight:7,req:'radar',wpn:{dmg:46,rng:330,rof:170,splash:46,arc:1,min:70},tip:'ירי ארוך טווח עם רסס. צריכה מכ״ם או יחידה שרואה את המטרה'},
   airfield:{name:'מנחת',w:5,h:3,hp:700,cost:550,img:'airfield',sight:7,req:'radar',airfield:true,tip:'מקצר את זמן ההמתנה לתקיפה אווירית ומוזיל אותה'},
+  maoz:{name:'מעוז',w:4,h:4,hp:2200,cost:0,img:'maoz',sight:9,foeOnly:true,wpn:{dmg:22,rng:150,rof:50}},
+  bridge:{name:'אתר הגשר',w:5,h:3,hp:1600,cost:0,img:'bridge',sight:8,foeOnly:true},
   fbunker:{name:'עמדה מבוצרת',w:3,h:3,hp:700,cost:0,img:'pillbox',sight:8,foeOnly:true,wpn:{dmg:30,rng:150,rof:80},tur:'t55'}
  });
  Object.assign(S.units,{
@@ -113,5 +115,20 @@ window.SCENARIOS = [
  const bunk={3:[['fbunker',46,20]],6:[['fbunker',52,14],['fbunker',52,26]],7:[['fbunker',54,14],['fbunker',54,28]],9:[['fbunker',58,18]],10:[['fbunker',62,16],['fbunker',62,32]]};
  S.stages.forEach(st=>{const x=X[st.id]||{};st.date=x.date;st.place=x.place;st.unlockB=['depot','factory'].concat(x.B||[]);st.unlock=st.unlock.concat(x.U||[]);st.startB=x.startB||[];st.startU=x.startU||[];st.night=!!x.night;
   if(foeX[st.id])st.mix=st.mix.map((m,i)=>i?m.concat(foeX[st.id]):m);if(bunk[st.id])st.foeBase=(st.foeBase||[]).concat(bunk[st.id]);});
+ // v4: lighting, attack directions, reinforcements, missions, speakers
+ const V4={
+  1:{light:'noon',dirs:['e'],reinf:[{wave:3,units:['shot','shot','tiran'],msg:'פלוגת שוט מהמילואים עלתה לרמה ומצטרפת אליך!'}],speaker:'gilaadi'},
+  2:{light:'dusk',dirs:['e','ne'],smoke:1,reinf:[{wave:4,units:['shot','shot','shot']}],speaker:'gilaadi',brief2:{who:'radio',text:'"המפקד, תצפית מדווחת על שני טורים: אחד ממזרח ואחד מצפון-מזרח."'}},
+  3:{light:'night',dirs:['e'],smoke:1,speaker:'gilaadi'},
+  4:{light:'dawn',dirs:['e','se','ne'],smoke:1,protect:[['maoz',30,10],['maoz',33,20],['maoz',30,30]],protectMin:1,obj:'hold',goal:'לעמוד ב-8 גלים ולשמור לפחות מעוז אחד',reinf:[{wave:3,units:['magach','magach','magach'],msg:'גדוד מגח הגיע מהעורף!'}],speaker:'noa',brief2:{who:'noa',text:'"שלושה מעוזים על קו המים עדיין מחזיקים. אם כולם נופלים, התעלה פתוחה. תגיע אליהם."'}},
+  5:{light:'noon',dirs:['e','ne','se'],smoke:1,reinf:[{wave:5,units:['magach','magach','shot','shot']}],speaker:'noa',brief2:{who:'pilot',text:'"כאן נשר 1. יש לנו פאנטומים בהמתנה. תן קואורדינטות ואנחנו שם תוך דקה."'}},
+  6:{light:'dawn',dirs:['e','ne'],smoke:1,speaker:'gilaadi',brief2:{who:'foe',text:'יירוט קשר של האויב: "כל הכוחות, להחזיק בקו. אין נסיגה."'}},
+  7:{light:'dusk',dirs:['e','se'],smoke:1,obj:'capture',capture:[[54,14],[54,28],[62,20]],goal:'לכבוש את שלוש הגבעות (להחזיק כוח על כל גבעה עד שהדגל עולה)',speaker:'gilaadi'},
+  8:{light:'night',dirs:['e','ne','se'],smoke:1,reinf:[{wave:6,units:['para','para','magach','magach']}],speaker:'noa'},
+  9:{light:'dawn',dirs:['e','se'],smoke:1,protect:[['bridge',16,24]],goal:'להשמיד את בסיסי האויב ולשמור על אתר הגשר',speaker:'noa',brief2:{who:'radio',text:'"הגשר הוא כל מה שיש לנו. אם הוא נופל, כל הכוח שמעבר לתעלה מנותק."'}},
+  10:{light:'dusk',dirs:['e','ne','se'],smoke:1,reinf:[{wave:4,units:['magach','magach','m109','para']}],speaker:'gilaadi',brief2:{who:'foe',text:'יירוט קשר של האויב: "הכוחות הישראליים ממערב לתעלה. בקשו הפסקת אש."'}}
+ };
+ S.stages.forEach(st=>Object.assign(st,V4[st.id]||{}));
+ S.people={gilaadi:{name:'סא״ל אהרון גלעדי',role:'קצין המבצעים',img:'assets/s/advisor_officer.png'},noa:{name:'סרן נועה ברק',role:'קצינת המודיעין של החטיבה',img:'assets/s/por/noa.jpg'},radio:{name:'סמל דנה',role:'קשרית',img:'assets/s/por/radio.jpg'},pilot:{name:'סרן יואב, ״נשר 1״',role:'טייס פאנטום',img:'assets/s/por/pilot.jpg'},foe:{name:'מפקד חטיבת השריון של האויב',role:'קשר מיורט',img:'assets/s/por/foe.jpg'}};
  S.memorial='המשחק מוקדש לזכר 2,656 חללי מלחמת יום הכיפורים.';
 })();

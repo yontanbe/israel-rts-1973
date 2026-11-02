@@ -1,7 +1,7 @@
 // Landing page, account dialogs and profile panel. Talks to ACC (account.js) and to the game menu in ui.js.
 (function(){
 const $=id=>document.getElementById(id);const SC=SCENARIOS.find(s=>s.id==='yk1973');
-const SHOTS=[['assets/shots/s1.jpg','שלב 1: הבלימה ברמת הגולן'],['assets/shots/s2.jpg','עמדות טנק חפורות ומחנה חי״ר'],['assets/shots/s3.jpg','לילה בגזרה הדרומית'],['assets/shots/s4.jpg','סיני: קרב השריון'],['assets/shots/s5.jpg','תדריך עם מפה'],['assets/shots/s6.jpg','ארטילריה ומכ״ם']];
+const SHOTS=[['assets/shots/battle5.jpg','סיני: קרב שריון גדול, 35 כלים בשדה'],['assets/shots/battle1.jpg','הגולן: גל רביעי נשבר מול הקו'],['assets/s/ill/5.jpg','איור: קרב השריון בסיני'],['assets/s/ill/9.jpg','איור: הצליחה'],['assets/shots/s1.jpg','שלב 1: הבלימה ברמת הגולן'],['assets/shots/s2.jpg','עמדות טנק חפורות ומחנה חי״ר'],['assets/shots/s3.jpg','לילה בגזרה הדרומית'],['assets/shots/s4.jpg','סיני: קרב השריון'],['assets/shots/s5.jpg','תדריך עם מפה'],['assets/shots/s6.jpg','ארטילריה ומכ״ם']];
 let mode='reg';
 function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hide');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.add('hide'),2600);}
 function show(id){['home','menu','brief','end','wrap'].forEach(i=>$(i).classList.toggle('hide',i!==id));}
@@ -26,7 +26,9 @@ function openProf(){const u=ACC.user();if(!u){openAuth('login');return;}$('prof'
  $('pStats').innerHTML=`<div><b>★ ${T.stars}</b>כוכבים</div><div><b>${T.wins}/${T.played}</b>ניצחונות</div><div><b>${T.kills}</b>הושמדו</div><div><b>${Math.round(T.secs/60)}</b>דקות משחק</div>`;
  $('pCode').value=ACC.exportCode();$('pVoice').checked=ACC.getSetting('voice')!==false;$('pMsg').textContent=u.cloud?(ACC.lastSync?'סונכרן לענן':'מחובר לענן'):'';}
 function installHelp(){goHome();setTimeout(()=>$('install').scrollIntoView({behavior:'smooth'}),50);}
-function init(){$('hIntro').textContent=SC.intro;$('hMem').textContent=SC.memorial||'';
+function slides(){const L=['assets/s/ill/1.jpg','assets/s/ill/5.jpg','assets/s/ill/9.jpg','assets/s/ill/2.jpg','assets/s/ill/8.jpg','assets/s/keyart_clean.jpg'];$('slides').innerHTML=L.map((u,i)=>`<div class="sl${i?'':' on'}" style="background-image:url(${u})"></div>`).join('');let k=0;const el=[...document.querySelectorAll('#slides .sl')];setInterval(()=>{if(document.hidden||$('home').classList.contains('hide'))return;el[k].classList.remove('on');k=(k+1)%el.length;el[k].classList.add('on');},6000);}
+function people(){$('peopleList').innerHTML=Object.values(SC.people).map(p=>`<figure><img loading="lazy" src="${p.img}" alt="${p.name}"><figcaption><b>${p.name}</b>${p.role}</figcaption></figure>`).join('')+'<p class="dim small center">כל הדמויות בדיוניות.</p>';}
+function init(){$('hIntro').textContent=SC.intro;slides();people();$('hMem').textContent=SC.memorial||'';
  $('gal').innerHTML=SHOTS.map(([src,t])=>`<figure><img loading="lazy" src="${src}" alt="${t}" onerror="this.parentElement.remove()"><figcaption>${t}</figcaption></figure>`).join('');
  $('hPlay').onclick=goPlay;$('hCont').onclick=()=>{goPlay();setTimeout(()=>$('cont').click(),30);};$('hReg').onclick=()=>openAuth('reg');$('hAcc').onclick=()=>ACC.user()?openProf():openAuth('login');$('hInst').onclick=()=>window.__install();
  $('toHome').onclick=goHome;$('who').onclick=()=>ACC.user()?openProf():openAuth('login');$('bback').onclick=goPlay;
