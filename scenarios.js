@@ -21,7 +21,7 @@ window.SCENARIOS = [
     brief:'"כוח אויב התבסס בגזרה הדרומית והקים בסיס הצטיידות. כל עוד המפעל שלהם עובד, הם ימשיכו לשלוח כלים. הערפל עבה: תשלח ג׳יפ סיור קודם, ואחר כך תכה בכל הכוח."',
     goal:'להשמיד את כל מבני האויב בגזרה',
     outro:'בסיס ההצטיידות שותק. בגזרה הדרומית חזר השקט, ופיקוד הצפון מעביר את החטיבה שלנו דרומה. "סיני," אומר גלעדי, "שם החול מכסה הכל."'},
-   {id:4,name:'סואץ: המעוזים',map:'sinai',k:0.8,W:64,H:40,obj:'hold',waves:8,firstWave:40,waveGap:36,startRes:600,mix:[['t55','btr','btr'],['t55','t62','btr'],['t62','t62','btr','btr']],
+   {id:4,name:'סואץ: המעוזים',map:'sinai',k:1.05,W:64,H:40,obj:'hold',waves:8,firstWave:40,waveGap:36,startRes:600,mix:[['t55','btr','btr'],['t55','t62','btr'],['t62','t62','btr','btr']],
     unlock:['truck','jeep','shot','tiran','magach'],
     brief:'"קו המעוזים לאורך התעלה מותקף. הצוותים שם מחזיקים בציפורניים. הגיע אלינו גדוד מגח, מהיר ומדויק. נחזיק עד שכוחות המילואים ישלימו את הפריסה."',
     goal:'לעמוד ב-8 גלים בחזית התעלה',
@@ -87,7 +87,7 @@ window.SCENARIOS = [
   aa:{name:'סוללת הוק',w:4,h:4,hp:650,cost:480,img:'aa_site',sight:9,req:'radar',aa:600,tip:'מיירטת מיגים בטווח רחב'},
   artillery:{name:'עמדת ארטילריה',w:3,h:3,hp:600,cost:520,img:'artillery',sight:7,req:'radar',wpn:{dmg:46,rng:330,rof:170,splash:46,arc:1,min:70},tip:'ירי ארוך טווח עם רסס. צריכה מכ״ם או יחידה שרואה את המטרה'},
   airfield:{name:'מנחת',w:5,h:3,hp:700,cost:550,img:'airfield',sight:7,req:'radar',airfield:true,tip:'מקצר את זמן ההמתנה לתקיפה אווירית ומוזיל אותה'},
-  maoz:{name:'מעוז',w:4,h:4,hp:2200,cost:0,img:'maoz',sight:9,foeOnly:true,wpn:{dmg:22,rng:150,rof:50}},
+  maoz:{name:'מעוז',w:4,h:4,hp:2400,cost:0,img:'maoz',sight:10,foeOnly:true,wpn:{dmg:30,rng:175,rof:45},garrison:['shot','shot']},
   bridge:{name:'אתר הגשר',w:5,h:3,hp:1600,cost:0,img:'bridge',sight:8,foeOnly:true},
   fbunker:{name:'עמדה מבוצרת',w:3,h:3,hp:700,cost:0,img:'pillbox',sight:8,foeOnly:true,wpn:{dmg:30,rng:150,rof:80},tur:'t55'}
  });
