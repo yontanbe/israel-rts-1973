@@ -1,6 +1,6 @@
 # מבצע מדבר · 1973
 
-**▶ לשחק עכשיו בדפדפן: https://yontanbe.github.io/israel-rts-1973/**
+▶ לשחק עכשיו בדפדפן: https://yontanbe.github.io/israel-rts-1973/
 
 להורדה למחשב: [Releases](https://github.com/yontanbe/israel-rts-1973/releases/latest)
 
