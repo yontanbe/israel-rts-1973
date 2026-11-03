@@ -103,3 +103,12 @@ footer{text-align:center;padding:30px 16px 60px;border-top:1px solid #3a2f1f;col
 .sideobj{font-size:12px;color:#e9d9b0;margin:2px 0}.medal{font-size:15px;color:var(--gold);margin:4px 0}
 #tbar{display:flex;flex-wrap:wrap;gap:4px;max-width:calc(100% - 20px)}
 @media (max-width:900px){#tbar button{padding:4px 6px;font-size:12px}}
+/* v6 */
+.bchap{color:#c9b58a;font-size:13px;letter-spacing:1px;margin-top:2px}
+.bdl{font-size:13px;margin-top:8px;text-align:right}.bdiff,.dpl{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 6px}
+.bdiff button,.dpl button{display:flex;flex-direction:column;gap:2px;padding:6px 4px;line-height:1.25}.bdiff small,.dpl small{font-size:11px;opacity:.85}
+.bdiff button.on{background:linear-gradient(#a8823e,#6d5124);border-color:var(--gold)}
+.dpl{grid-template-columns:1fr 1fr}.dpl button{padding:12px 8px}.dpl b{font-size:18px}
+.epi{display:flex;gap:10px;align-items:center;text-align:right;margin:6px 0}.epi img{width:48px;height:48px;border-radius:4px;object-fit:cover;border:2px solid var(--line)}.epi b{display:block;color:var(--gold);font-size:13px}
+.memorial h3{color:var(--gold);margin:4px 0 8px}
+@media (max-width:720px){.bdiff{grid-template-columns:1fr 1fr}}

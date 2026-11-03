@@ -6,7 +6,11 @@ let mode='reg';
 function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hide');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.add('hide'),2600);}
 function show(id){['home','menu','brief','end','wrap'].forEach(i=>$(i).classList.toggle('hide',i!==id));}
 function goHome(){show('home');refresh();try{history.replaceState(null,'',location.pathname);}catch(e){}}
-function goPlay(){show('menu');window.__menu&&window.__menu();try{history.replaceState(null,'','#play');}catch(e){}}
+function pickDiff(then){const L=[['easy','קל','מתחילים, או מי שרוצה ליהנות מהסיפור'],['normal','רגיל','האתגר המאוזן. מומלץ'],['hard','קשה','גלים גדולים יותר ופחות דלק'],['veteran','ותיק','למפקדים מנוסים בלבד']];
+ $('dpl').innerHTML=L.map(([k,n,t])=>`<button data-k="${k}" class="${k==='normal'?'gold':''}"><b>${n}</b><small>${t}</small></button>`).join('');$('dpick').classList.remove('hide');
+ $('dpl').querySelectorAll('button').forEach(b=>b.onclick=()=>{window.__setDiff(b.dataset.k);$('dpick').classList.add('hide');then();});}
+function goPlay(){if(!ACC.getSetting('diff')&&!Object.keys(ACC.getJSON('prog',{})).length){pickDiff(()=>{goPlay2();setTimeout(()=>{const b=document.getElementById('stage-1');if(b)b.click();},50);});return;}goPlay2();}
+function goPlay2(){show('menu');window.__menu&&window.__menu();try{history.replaceState(null,'','#play');}catch(e){}}
 function refresh(){const u=ACC.user();$('hAcc').textContent=u?ACC.label():'👤 התחברות';$('hReg').classList.toggle('hide',!!u);
  const L=ACC.getJSON('last',null);const has=ACC.get('save')||ACC.get('auto');$('hCont').classList.toggle('hide',!has||!L);if(L&&has)$('hCont').textContent=`▶ המשך משלב ${L.st}`;
  const T=ACC.totals(),P=ACC.getJSON('prog',{});const mx=Math.max(1,...Object.values(P).map(Number));

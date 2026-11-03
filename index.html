@@ -48,6 +48,8 @@
   <div id="aErr" class="err"></div><button class="big gold" id="aGo" type="submit">צור חשבון</button>
  </form><div class="dim small" id="aNote"></div><div id="aList" class="ulist"></div></div></div>
 
+<!-- ===== difficulty picker (first play) ===== -->
+<div id="dpick" class="modal hide"><div class="panel"><h2>בחר רמת קושי</h2><p class="dim small">אפשר לשנות בכל שלב, בתדריך שלפני המשימה.</p><div id="dpl" class="dpl"></div></div></div>
 <!-- ===== profile dialog ===== -->
 <div id="prof" class="modal hide"><div class="panel">
  <button class="x" data-close>✖</button><h2 id="pName"></h2><div id="pStats" class="pstats"></div>
@@ -62,8 +64,8 @@
 <div class="row"><button id="cont" class="big hide">▶ המשך משחק שמור</button><button id="inst" class="big hide instbtn">📲 התקן כאפליקציה</button><button id="mute1" class="big">🔊 צליל</button></div>
 <div class="note">כל הדמויות והיחידות בדיוניות · קרבות בין כלים צבאיים בלבד · פועל גם בלי אינטרנט</div></div></div>
 <div id="brief" class="scr bgart hide"><div class="panel wide"><img id="bill" class="bill" alt=""><div class="adv"><img id="advimg" alt=""><div><b id="advname"></b><div id="advrole" class="sub"></div></div></div>
-<h2 id="bt"></h2><div id="bdate" class="bdate"></div><div class="bwrap"><canvas id="bmap" width="420" height="236"></canvas><div class="legend"><span><i style="background:#3c8cff"></i>הבסיס שלך</span><span><i style="background:#e6322a"></i>בסיס אויב</span><span><i style="background:#ffbe28"></i>סוללת SAM</span><span>➜ כיוון ההתקפה</span></div></div>
-<div id="bb" class="story"></div><div id="b2" class="b2 hide"><img id="b2img" alt=""><div><b id="b2name"></b><div id="b2txt"></div></div></div><div id="bg" class="goal"></div><div class="row"><button class="big" id="bback">חזרה</button><button class="big gold" id="go">יוצאים לדרך</button></div></div></div>
+<div id="bchap" class="bchap"></div><h2 id="bt"></h2><div id="bdate" class="bdate"></div><div class="bwrap"><canvas id="bmap" width="420" height="236"></canvas><div class="legend"><span><i style="background:#3c8cff"></i>הבסיס שלך</span><span><i style="background:#e6322a"></i>בסיס אויב</span><span><i style="background:#ffbe28"></i>סוללת SAM</span><span>➜ כיוון ההתקפה</span></div></div>
+<div id="bb" class="story"></div><div id="b2" class="b2 hide"><img id="b2img" alt=""><div><b id="b2name"></b><div id="b2txt"></div></div></div><div id="bg" class="goal"></div><div class="bdl">רמת קושי:</div><div id="bdiff" class="bdiff"></div><div class="row"><button class="big" id="bback">חזרה</button><button class="big gold" id="go">יוצאים לדרך</button></div></div></div>
 <div id="end" class="scr bgart hide"><div class="panel wide"><img id="eill" class="bill hide" alt=""><h1 id="et"></h1><div id="estars" class="stars"></div><div id="ehint" class="dim small"></div><div id="emedal" class="medal"></div><div id="eb" class="sub"></div><div class="adv"><img id="advimg2" alt=""><div id="eo" class="story"></div></div><div id="memorial" class="memorial hide"></div>
 <div class="row"><button class="big gold" id="next">לשלב הבא ▶</button><button class="big" id="retry">↻ נסה שוב</button><button class="big" id="tomenu">לתפריט</button></div></div></div>
 <div id="wrap" class="hide"><div id="view"><canvas id="c"></canvas><div id="grade"></div><div id="msg"></div><div id="tbar"><button id="tAll">בחר כוח</button><button id="tNone">בטל בחירה</button><button id="tAir" class="hide">✈ תקיפה</button><button id="tSmoke" class="hide">💨 עשן</button><button id="tAm" title="F">⚔ תקיפה בתנועה</button><button id="tStop" title="X">✋ עצור</button><button id="tDig" title="G">🛡 התבצר</button></div><div id="radio" class="radio hide"><img id="rimg" alt=""><div><b id="rname"></b><div id="rtxt"></div></div></div><div id="tut" class="tut hide"><b>🎓 הדרכה</b><div id="tuttxt"></div><button id="tutskip" class="sm">דלג על ההדרכה</button></div></div>
