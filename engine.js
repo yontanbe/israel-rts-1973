@@ -88,7 +88,7 @@ P.fire=function(u,t,w){const G=this,p=G.pos(t),from=u.kind==='b'?{x:u.cx,y:u.cy-
  if(G.headless||G.visible(from.x,from.y))G.emit(w.arc?'arty':u.def&&u.def.inf?'rifle':'shot',from.x,from.y);};
 P.nearestEnemy=function(u,r,needVis,minR){const o=this.pos(u);let best=null,bd=r;for(const e of this.ents){if(e.side===u.side||e.hp<=0)continue;const p=this.pos(e);const d=d2(o,p)-(e.kind==='b'?e.w/2:0);if(minR&&d<minR)continue;if(needVis&&u.side==='me'&&!this.visible(p.x,p.y))continue;if(e.kind==='u'&&d>70&&this.smokes.length&&this.inSmoke(e))continue;if(d<bd){bd=d;best=e;}}return best;};
 P.dropAt=function(u){let best=null,bd=1e9;for(const e of this.ents)if(e.kind==='b'&&e.side==='me'&&e.dep>=1&&(e.def.drop||e.type==='hq')){const d=d2(u,{x:e.cx,y:e.cy});if(d<bd){bd=d;best=e;}}return best;};
-P.damage=function(t,dmg,src){const G=this;if(t.hp<=0)return;if(t.kind==='u'&&G.smokes.some(z=>d2(z,t)<z.r)&&!(src&&src.kind==='u'&&d2(src,t)<80))dmg*=.5;if(t.protect)dmg*=.4;t.hp-=dmg;if(t.protect&&t.hp>0&&G.radio&&G.t-(t.alertT||-9999)>15*60){t.alertT=G.t;G.radio('noa',`${t.def.name} תחת התקפה! נשארו לו ${Math.max(1,Math.round(t.hp/t.max*100))}%. שלח כוח לעזרה.`);G.emit('alert',t.cx,t.cy);G.ping={x:t.cx,y:t.cy,t:G.t};}if(t.hp<=0){if(!G.headless)G.ev.push({k:'dead',x:G.pos(t).x,y:G.pos(t).y,kind:t.kind,type:t.type,side:t.side,w:t.w,h:t.h,ex:t.x,ey:t.y,sz:t.def.sz,inf:t.def.inf});if(t.protect&&G.radio)G.radio('gilaadi','איבדנו את '+t.def.name+'!');if(src&&src.kind==='u'&&src.hp>0){src.xp++;const r=src.xp>=7?2:src.xp>=3?1:0;if(r>src.rank){src.rank=r;src.max*=1.1;src.hp=Math.min(src.max,src.hp+src.max*.3);G.emit('rank',src.x,src.y,src.id);}}const p=G.pos(t);G.fx.push({x:p.x,y:p.y,r:t.kind==='b'?60:26,t:0,d:40,big:1});G.emit(t.kind==='b'?'bigboom':'boom',p.x,p.y);if(t.side==='foe')G.stats.kills++;else G.stats.losses++;if(t.kind==='b')G.gridDirty=1;}};
+P.damage=function(t,dmg,src){const G=this;if(t.hp<=0)return;if(t.kind==='u'&&G.smokes.some(z=>d2(z,t)<z.r)&&!(src&&src.kind==='u'&&d2(src,t)<80))dmg*=.5;if(t.protect)dmg*=.4;if(t.dug)dmg*=.6;t.hp-=dmg;if(t.protect&&t.hp>0&&G.radio&&G.t-(t.alertT||-9999)>15*60){t.alertT=G.t;G.radio('noa',`${t.def.name} תחת התקפה! נשארו לו ${Math.max(1,Math.round(t.hp/t.max*100))}%. שלח כוח לעזרה.`);G.emit('alert',t.cx,t.cy);G.ping={x:t.cx,y:t.cy,t:G.t};}if(t.hp<=0){if(!G.headless)G.ev.push({k:'dead',x:G.pos(t).x,y:G.pos(t).y,kind:t.kind,type:t.type,side:t.side,w:t.w,h:t.h,ex:t.x,ey:t.y,sz:t.def.sz,inf:t.def.inf});if(t.protect&&G.radio)G.radio('gilaadi','איבדנו את '+t.def.name+'!');if(src&&src.kind==='u'&&src.hp>0){src.xp++;const r=src.xp>=7?2:src.xp>=3?1:0;if(r>src.rank){src.rank=r;src.max*=1.1;src.hp=Math.min(src.max,src.hp+src.max*.3);G.emit('rank',src.x,src.y,src.id);}}const p=G.pos(t);G.fx.push({x:p.x,y:p.y,r:t.kind==='b'?60:26,t:0,d:40,big:1});G.emit(t.kind==='b'?'bigboom':'boom',p.x,p.y);if(t.side==='foe')G.stats.kills++;else{G.stats.losses++;if(t.def&&t.def.harv)G.stats.truckLost=1;}if(t.kind==='b')G.gridDirty=1;}};
 P.smokeAt=function(x,y){const G=this;if(!G.st.smoke||G.smokeCd>0||G.res<80)return false;G.res-=80;G.smokeCd=25*60;G.smokes.push({x,y,r:95,t:12*60,t0:12*60});G.emit('smoke',x,y);return true;};
 P.inSmoke=function(e){return this.smokes.length&&this.smokes.some(z=>d2(z,this.pos(e))<z.r);};
 P.airStrike=function(x,y){const G=this,A=G.sc.air.me;if(!G.st.air||G.air.cd>0||G.res<G.airCost())return false;G.res-=G.airCost();G.air.cd=G.airCd()*60|0;G.air.strikes.push({side:'me',x:-80,y,tx:x,ty:y,vx:9,done:0,img:G.rnd()<.5?A.img:G.sc.air.alt});G.emit('jet');return true;};
@@ -96,6 +96,17 @@ P.step=function(){const G=this;if(G.over)return;G.t++;
  if(G.gridDirty)G.rebuildGrid();
  if(!G.hold&&--G.nextWave<=0)G.spawnWave();
  for(const r of G.reinf)if(!r.done&&(r.wave?G.wave>=r.wave:G.t>=r.t*60)){r.done=1;const hq=G.ents.find(e=>e.type==='hq'&&e.side==='me');const y0=hq?hq.cy:G.H/2;r.units.forEach((t,i)=>{const u=G.addU(t,'me',12+(i%3)*26,y0-60+(i/3|0)*40+(i%2)*20);G.goTo(u,(hq?hq.x+hq.w+90:200)+(i%3)*34,y0-40+(i/3|0)*40);u.mv={x:u.goal.x,y:u.goal.y};});G.radio&&G.radio('radio',r.msg||`תגבורת הגיעה: ${r.units.length} כלים מהמערב!`);G.emit('reinf');}
+ if(G.st.foeArty&&!G.hold){if(G.barrage){if(--G.barrage.t<=0){const b=G.barrage;for(let i=0;i<6;i++){const a=G.rnd()*6.283,r=G.rnd()*b.r;G.shots.push({x:b.x+Math.cos(a)*r,y:b.y+Math.sin(a)*r-1,vx:0,vy:0,life:1+i*8,life0:1,dmg:70*G.D.hp,tgt:G.ents[0],side:'foe',splash:60,arc:0,shell:1});}G.barrage=null;}}
+  else if(G.t>(G.st.foeArtyAt||120)*60&&(G.artyT=(G.artyT||G.st.foeArty*60)-1)<=0){G.artyT=G.st.foeArty*60*G.D.gap;const tg=G.ents.filter(e=>e.side==='me'&&!e.def.harv&&(e.kind==='u'||e.type!=='hq'));if(tg.length){const t=tg[G.rnd()*tg.length|0],p=G.pos(t);G.barrage={x:p.x,y:p.y,r:95,t:210,t0:210};G.radio&&G.radio('noa','ארטילריה נכנסת! פנו את האזור המסומן!');G.emit('incoming',p.x,p.y);}}}
+ if(!G.headless||G.crateTest){if(G.t%60===0&&!G.hold&&(G.crates=G.crates||[]).length<2&&G.t-(G.crateT||0)>75*60){G.crateT=G.t;for(let k=0;k<30;k++){const x=G.W*(.12+G.rnd()*.4),y=G.H*(.1+G.rnd()*.8);if(G.free(x/CELL|0,y/CELL|0)){G.crates.push({x,y,id:G.uid++});G.radio&&G.radio('pilot','הצנחנו ארגז אספקה. סמנתי אותו במפה, תאסוף אותו לפני האויב.');G.cping={x,y,t:G.t};break;}}}
+  for(const c of (G.crates||[])){const u=G.ents.find(e=>e.side==='me'&&e.kind==='u'&&d2(e,c)<34);if(!u)continue;c.taken=1;G.stats.crates=(G.stats.crates||0)+1;const r=G.rnd();let msg;
+   if(r<.4){G.res+=400;msg='ארגז דלק: +400';}else if(r<.65){G.ents.forEach(e=>{if(e.side==='me'&&e.kind==='u'&&d2(e,c)<320)e.hp=e.max;});msg='ערכות תיקון: כל הכלים בסביבה תוקנו';}
+   else if(r<.85){u.rank=Math.min(2,u.rank+1);u.xp=Math.max(u.xp,u.rank===2?7:3);u.max*=1.1;u.hp=u.max;msg='צוות ותיק הצטרף: '+u.def.name+' עלה דרגה';}else{G.revealT=20*60;msg='צילומי אוויר: כל המפה גלויה ל-20 שניות';}
+   G.radio&&G.radio('radio',msg);G.emit('crate',c.x,c.y);}G.crates=(G.crates||[]).filter(c=>!c.taken);}
+ if(G.revealT>0){G.revealT--;if(G.t%10===0)G.vis.fill(1),G.seen.fill(1);}
+ if(G.st.side&&!G.sideDone){const sd=G.st.side;let ok=false;if(sd.type==='crates')ok=(G.stats.crates||0)>=sd.n;else if(sd.type==='sam')ok=!G.ents.some(e=>e.type==='sam'&&e.side==='foe'&&e.hp>0);else if(sd.type==='kills')ok=G.stats.kills>=sd.n;
+  if(ok){G.sideDone=1;G.res+=sd.bonus||500;G.radio&&G.radio('gilaadi','משימת משנה הושלמה: '+sd.text+'. קיבלת '+(sd.bonus||500)+' דלק.');G.emit('captured');}}
+ if(G.t%600===0&&!G.hold&&!G.ents.some(e=>e.side==='me'&&e.def.harv)&&!G.q.unit.some(q=>q.t==='truck')&&G.res<260){const hq=G.ents.find(e=>e.type==='hq'&&e.side==='me');if(hq){G.addU('truck','me',20,hq.cy);G.radio&&G.radio('radio','משאית אספקה חלופית הגיעה מהעורף. תשמרו עליה!');}}
  if(G.smokeCd>0)G.smokeCd--;G.smokes=G.smokes.filter(z=>--z.t>0);
  if(G.zones.length&&G.t%10===0)for(const z of G.zones){if(z.own)continue;const mine=G.ents.some(e=>e.side==='me'&&e.kind==='u'&&!e.def.harv&&d2(e,z)<z.r),foe=G.ents.some(e=>e.side==='foe'&&d2(G.pos(e),z)<z.r+20);if(mine&&!foe){z.p+=10;if(z.p>=480){z.own=1;G.radio&&G.radio('gilaadi','הגבעה בידינו! '+(G.zones.filter(q=>q.own).length)+' מתוך '+G.zones.length);G.emit('captured',z.x,z.y);}}else if(foe)z.p=Math.max(0,z.p-20);}
  if(G.air.cd>0)G.air.cd--;
@@ -108,14 +119,14 @@ P.step=function(){const G=this;if(G.over)return;G.t++;
  // enemy factories produce raiders
  for(const b of G.ents)if(b.kind==='b'&&b.side==='foe'&&b.type==='factory'&&--b.spawnT<=0){b.spawnT=(1500/G.D.cnt)|0;const u=G.addU(G.rnd()<.5?'t55':'t62','foe',b.x-16,b.cy);u.state='attack';}
  for(const e of G.ents){if(e.kind==='b'){if(e.dep<1){e.dep=Math.min(1,e.dep+.012);continue;}G.buildingAI(e);continue;}G.unitAI(e);}
- for(const p of G.shots){p.x+=p.vx;p.y+=p.vy;p.life--;if(p.life<=0){if(p.splash){for(const e of G.ents)if(e.side!==p.side&&e.hp>0){const q=G.pos(e),dd=d2(q,p)-(e.kind==='b'?e.w/3:0);if(dd<p.splash)G.damage(e,p.dmg*(dd<p.splash*.4?1:.55)*(e.kind==='b'?.5:1)*(e.def.inf?1.3:1),p.src);}G.fx.push({x:p.x,y:p.y,r:26,t:0,d:26,big:1});G.emit('boom',p.x,p.y);}
+ for(const p of G.shots){p.x+=p.vx;p.y+=p.vy;p.life--;if(p.life<=0){if(p.shell){for(const e of G.ents)if(e.side==='me'&&e.hp>0){const q=G.pos(e),dd=d2(q,p)-(e.kind==='b'?e.w/3:0);if(dd<p.splash)G.damage(e,p.dmg*(dd<p.splash*.4?1:.5)*(e.kind==='b'?.5:1));}G.fx.push({x:p.x,y:p.y,r:30,t:0,d:28,big:1});G.emit('bigboom',p.x,p.y);continue;}if(p.splash){for(const e of G.ents)if(e.side!==p.side&&e.hp>0){const q=G.pos(e),dd=d2(q,p)-(e.kind==='b'?e.w/3:0);if(dd<p.splash)G.damage(e,p.dmg*(dd<p.splash*.4?1:.55)*(e.kind==='b'?.5:1)*(e.def.inf?1.3:1),p.src);}G.fx.push({x:p.x,y:p.y,r:26,t:0,d:26,big:1});G.emit('boom',p.x,p.y);}
   else{G.damage(p.tgt,p.dmg*(p.tgt.kind==='b'?.5:1)*(p.tgt.def.inf&&!(p.src&&p.src.def.inf)?.7:1),p.src);G.fx.push({x:p.x,y:p.y,r:9,t:0,d:12});}}}
  G.shots=G.shots.filter(p=>p.life>0);G.fx.forEach(f=>f.t++);G.fx=G.fx.filter(f=>f.t<f.d);
  G.ents=G.ents.filter(e=>e.hp>0);G.sel=G.sel.filter(e=>e.hp>0);
  if(G.t%10===0&&!G.headless)G.updFog();
  const foes=G.ents.filter(e=>e.side==='foe');
  if(!G.ents.some(e=>e.side==='me'&&e.type==='hq'))G.over='lose';
- else if(G.st.obj==='hold'&&G.wave>=G.st.waves&&!foes.length)G.over='win';
+ else if(G.st.obj==='hold'&&G.wave>=G.st.waves&&!foes.some(e=>!e.retreat))G.over='win';
  else if(G.st.obj==='kills'&&G.stats.kills>=G.st.kills)G.over='win';
  else if(G.st.obj==='kills'&&G.wave>=G.st.waves&&!foes.length)G.over=G.stats.kills>=G.st.kills?'win':'lose';
  else if(G.st.obj==='destroy'&&!foes.some(e=>e.kind==='b'))G.over='win';
@@ -127,6 +138,7 @@ P.buildingAI=function(b){const G=this,d=b.def;
   if(t){const p=G.pos(t);const want=Math.atan2(p.y-b.cy,p.x-b.cx);let da=want-b.tur;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;b.tur+=Math.max(-.08,Math.min(.08,da));if(Math.abs(da)<.25&&b.cd<=0){b.cd=d.wpn.rof;G.fire(b,t,d.wpn);}}}
  if(d.heal&&b.side==='me'&&G.t%20===0)for(const e of G.ents){if(e.side!=='me'||e===b||e.hp>=e.max)continue;const q=G.pos(e);if(d2(q,{x:b.cx,y:b.cy})<b.w/2+170){e.hp=Math.min(e.max,e.hp+e.max*(e.kind==='b'?.012:.03));if(e.kind==='u'&&e.repairing&&e.hp>=e.max){e.repairing=0;G.emit('say',e.x,e.y,e.id,'fixed');}}}
 };
+P.sideOk=function(){const sd=this.st.side;if(!sd)return false;if(sd.type==='trucks')return this.over==='win'&&!this.stats.truckLost;return !!this.sideDone;};
 P.stars=function(){const G=this,st=G.st;if(G.over!=='win')return 0;const par=(st.firstWave+st.waves*st.waveGap)*1.15+(st.obj==='destroy'?240:60);let s=1;if(G.stats.losses<=Math.max(3,Math.round(st.waves*.8)))s++;if(G.t/60<=par)s++;return s;};
 P.updFog=function(){const G=this;G.vis.fill(0);for(const e of G.ents){if(e.side!=='me')continue;const p=G.pos(e),r=G.sightOf(e)+(e.kind==='b'?e.w/CELL/2:0);const cx=p.x/CELL|0,cy=p.y/CELL|0,R=Math.ceil(r);
  for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){if(dx*dx+dy*dy>r*r)continue;const x=cx+dx,y=cy+dy;if(x<0||y<0||x>=G.gw||y>=G.gh)continue;const i=y*G.gw+x;G.vis[i]=1;G.seen[i]=1;}}};
@@ -141,24 +153,25 @@ P.unitAI=function(u){const G=this,d=u.def;if(u.cd>0)u.cd--;
   else{const dp=G.dropAt(u);if(!dp)return;if(d2(u,{x:dp.cx,y:dp.cy})>dp.w/2+22){if(!u.path)G.goTo(u,dp.cx,dp.cy+dp.h/2+10);G.follow(u);if(!u.path.length)u.path=null;}else{u.path=null;G.res+=Math.round(u.load*1.5);G.stats.harv+=u.load;u.load=0;u.state='harvest';}}
   return;}
  if(u.side==='foe'&&!u.def.inf){if(!u.retreat&&u.hp<u.max*.28&&u.home&&G.rnd()<.5){u.retreat=1;u.tgt=null;u.path=null;}
-  if(u.retreat){if(u.hp>=u.max*.7){u.retreat=0;u.path=null;}else{if(d2(u,u.home)>40){if(!u.path)G.goTo(u,u.home.x,u.home.y);G.follow(u);}else if(G.t%20===0)u.hp=Math.min(u.max,u.hp+u.max*.02);return;}}}
+  if(u.retreat){if(u.hp>=u.max*.7){u.retreat=0;u.path=null;}else{if(d2(u,u.home)>40){if(!u.path)G.goTo(u,u.home.x,u.home.y);G.follow(u);}else if(G.wave>=G.st.waves){u.hp=0;u.gone=1;}else if(G.t%20===0)u.hp=Math.min(u.max,u.hp+u.max*.02);return;}}}
  if(u.raid&&!u.tgt&&G.t%30===u.id%30){const tr=G.ents.filter(e=>e.side==='me'&&e.def.harv).sort((a,b)=>d2(a,u)-d2(b,u))[0];if(tr&&d2(tr,u)<900)u.tgt=tr;}
  let t=u.tgt&&u.tgt.hp>0?u.tgt:null;if(!t)u.tgt=null;
- if(!t&&!u.mv)t=G.nearestEnemy(u,u.state==='guard'?300:u.side==='foe'?230:d.rng+50,!!d.arc,d.min);if(t&&u.state==='guard'&&u.post&&d2(u,u.post)>420){t=null;u.tgt=null;}if(!t&&u.mv&&u.amove)t=G.nearestEnemy(u,d.rng+20);
+ if(!t&&!u.mv)t=G.nearestEnemy(u,u.state==='guard'?300:u.side==='foe'?230:u.dug||u.hold?d.rng*(u.dug?1.12:1):d.rng+50,!!d.arc,d.min);if(t&&u.state==='guard'&&u.post&&d2(u,u.post)>420){t=null;u.tgt=null;}if(!t&&u.mv&&u.amove)t=G.nearestEnemy(u,d.rng+20);
  if(t){const p=G.pos(t);const dist=d2(u,p)-(t.kind==='b'?Math.min(t.w,t.h)/2:0);u.tur=Math.atan2(p.y-u.y,p.x-u.x);
-  if(dist<=d.rng&&!(d.min&&dist<d.min)){u.path=null;if(u.cd<=0){u.cd=d.rof;G.fire(u,t,d);}
+  if(dist<=d.rng*(u.dug?1.12:1)&&!(d.min&&dist<d.min)){u.path=null;if(u.cd<=0){u.cd=d.rof;G.fire(u,t,d);}
    let da=u.tur-u.ang;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;u.ang+=Math.max(-.06,Math.min(.06,da));return;}
-  if(!u.mv||u.tgt){if(!u.path||(G.t+u.id)%60===0)G.goTo(u,p.x,p.y);G.follow(u);return;}}
+  if(u.dug||u.hold&&!u.tgt){u.tgt=null;}else if(!u.mv||u.tgt){if(!u.path||(G.t+u.id)%60===0)G.goTo(u,p.x,p.y);G.follow(u);return;}}
+  if(u.dug){u.mv=null;u.path=null;}
  if(u.mv){if(!u.path)G.goTo(u,u.mv.x,u.mv.y);if(G.follow(u)){u.mv=null;u.path=null;}return;}
  if(u.state==='guard'&&u.post&&d2(u,u.post)>30){if(!u.path)G.goTo(u,u.post.x,u.post.y);if(G.follow(u))u.path=null;}
  if(u.side==='foe'&&u.state==='attack'){const hq=G.ents.find(e=>e.side==='me'&&e.type==='hq')||G.ents.find(e=>e.side==='me');if(hq){const p=G.pos(hq);if(!u.path||(G.t+u.id)%240===0)G.goTo(u,p.x,p.y);G.follow(u);}}
  const sep=d.inf?16:d.sz*.95;for(const o of G.ents)if(o!==u&&o.kind==='u'&&Math.abs(o.x-u.x)<sep&&Math.abs(o.y-u.y)<sep){const a=Math.atan2(u.y-o.y,u.x-o.x)||G.rnd()*6;const nx=u.x+Math.cos(a)*.7,ny=u.y+Math.sin(a)*.7;if(G.free(nx/CELL|0,ny/CELL|0)){u.x=nx;u.y=ny;}}
 };
 // ---- save / load ----
-P.serialize=function(){const G=this;return JSON.stringify({sc:G.sc.id,st:G.st.id,diff:G.diff,seed:G.seed,t:G.t,res:G.res,wave:G.wave,nextWave:G.nextWave===Infinity?-1:G.nextWave,stats:G.stats,q:G.q,air:{cd:G.air.cd},foeAirT:G.foeAirT,uid:G.uid,zones:G.zones,reinf:G.reinf,rally:G.rally,smokeCd:G.smokeCd,dirN:G.dirN,
- fields:G.fields.map(f=>f.amt),seen:Array.from(G.seen).join(''),ents:G.ents.map(e=>({protect:e.protect,raid:e.raid,home:e.home,retreat:e.retreat,xp:e.xp,rank:e.rank,tur:e.kind==='b'?e.tur:undefined,post:e.post,atk:e.atk,id:e.id,kind:e.kind,type:e.type,side:e.side,x:e.x,y:e.y,hp:e.hp,max:e.max,dep:e.dep,ang:e.ang,load:e.load,state:e.state,spawnT:e.spawnT,mv:e.mv,amove:e.amove}))});};
+P.serialize=function(){const G=this;return JSON.stringify({sc:G.sc.id,st:G.st.id,diff:G.diff,seed:G.seed,t:G.t,res:G.res,wave:G.wave,nextWave:G.nextWave===Infinity?-1:G.nextWave,stats:G.stats,q:G.q,air:{cd:G.air.cd},foeAirT:G.foeAirT,uid:G.uid,zones:G.zones,reinf:G.reinf,rally:G.rally,smokeCd:G.smokeCd,dirN:G.dirN,crates:G.crates,sideDone:G.sideDone,artyT:G.artyT,
+ fields:G.fields.map(f=>f.amt),seen:Array.from(G.seen).join(''),ents:G.ents.map(e=>({dug:e.dug,hold:e.hold,protect:e.protect,raid:e.raid,home:e.home,retreat:e.retreat,xp:e.xp,rank:e.rank,tur:e.kind==='b'?e.tur:undefined,post:e.post,atk:e.atk,id:e.id,kind:e.kind,type:e.type,side:e.side,x:e.x,y:e.y,hp:e.hp,max:e.max,dep:e.dep,ang:e.ang,load:e.load,state:e.state,spawnT:e.spawnT,mv:e.mv,amove:e.amove}))});};
 Game.load=function(str){const o=JSON.parse(str);if(!o||!o.ents)throw new Error('bad save');const sc=SCENARIOS.find(s=>s.id===o.sc),st=sc.stages.find(s=>s.id===o.st);const G=new Game(sc,st,o.diff,o.seed,false);
- Object.assign(G,{t:o.t,res:o.res,wave:o.wave,nextWave:o.nextWave<0?Infinity:o.nextWave,stats:o.stats,q:o.q,foeAirT:o.foeAirT,uid:o.uid});G.air.cd=o.air.cd;if(o.zones)G.zones=o.zones;if(o.reinf)G.reinf=o.reinf;G.rally=o.rally||null;G.smokeCd=o.smokeCd||0;G.dirN=o.dirN||0;o.fields.forEach((a,i)=>G.fields[i]&&(G.fields[i].amt=a));
+ Object.assign(G,{t:o.t,res:o.res,wave:o.wave,nextWave:o.nextWave<0?Infinity:o.nextWave,stats:o.stats,q:o.q,foeAirT:o.foeAirT,uid:o.uid});G.air.cd=o.air.cd;if(o.zones)G.zones=o.zones;if(o.reinf)G.reinf=o.reinf;G.rally=o.rally||null;G.smokeCd=o.smokeCd||0;G.dirN=o.dirN||0;G.crates=o.crates||[];G.sideDone=o.sideDone;G.artyT=o.artyT;o.fields.forEach((a,i)=>G.fields[i]&&(G.fields[i].amt=a));
  for(let i=0;i<o.seen.length;i++)G.seen[i]=+o.seen[i];
  G.ents=o.ents.map(e=>{const d=e.kind==='b'?sc.buildings[e.type]:sc.units[e.type];const n=Object.assign({},e,{def:d,tgt:null,path:null,cd:0,xp:e.xp||0,rank:e.rank||0});if(e.kind==='b'){n.w=d.w*TILE;n.h=d.h*TILE;n.cx=e.x+n.w/2;n.cy=e.y+n.h/2;}return n;});G.rebuildGrid();G.updFog();return G;};
 // ---- player bot for balance sims ----

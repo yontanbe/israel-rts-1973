@@ -36,14 +36,33 @@ def sheet(name,mode):
   a=np.array(Image.open(f'{RAW}/{name}.jpg').convert('RGB')).astype(float);H,W,_=a.shape
   if mode=='black':al=a.max(2)/255;al=np.clip((al-.06)*1.25,0,1);rgb=np.clip(a/np.maximum(al[...,None],1e-3),0,255)
   else:al=1-a.min(2)/255;al=np.clip((al-.06)*1.15,0,1);rgb=np.clip((a-255*(1-al[...,None]))/np.maximum(al[...,None],1e-3),0,255)
-  im=Image.fromarray(np.dstack([rgb,al*255]).astype('uint8'),'RGBA');fw,fh=W//4,H//4;out=Image.new('RGBA',(512,512))
+  im=Image.fromarray(np.dstack([rgb,al*255]).astype('uint8'),'RGBA');fw,fh=W//4,H//4;C=256;out=Image.new('RGBA',(C*4,C*4))
   for k in range(16):
-    m=10 if mode=='white' else 4;c=im.crop(((k%4)*fw+m,(k//4)*fh+m,(k%4+1)*fw-m,(k//4+1)*fh-m)).resize((122,122),Image.LANCZOS);out.paste(c,((k%4)*128+3,(k//4)*128+3))
+    m=10 if mode=='white' else 4;c=im.crop(((k%4)*fw+m,(k//4)*fh+m,(k%4+1)*fw-m,(k//4+1)*fh-m)).resize((C-6,C-6),Image.LANCZOS);out.paste(c,((k%4)*C+3,(k//4)*C+3))
   if mode=='white':  # smoke columns: fade the top of each frame so the column never ends in a hard edge
     A=np.array(out).astype(float);
     for k in range(4):
-      for j in range(40):A[k*128+j,:,3]*=(j/40)**1.5
+      for j in range(80):A[k*C+j,:,3]*=(j/80)**1.5
     out=Image.fromarray(A.astype('uint8'),'RGBA')
   out.save(f'{S}fx/{name[3:]}.png',optimize=True)
 sheet('fx_boom','black');sheet('fx_smoke','white');sheet('fx_dust','black')
 print('ok')
+# ---- v5: 8-frame run cycles (2 rows x 4 cells) -> horizontal strip, every frame aligned on the feet
+def keyimg(im):
+  tmp=f'/tmp/_cell.jpg';im.convert('RGB').save(tmp,quality=95);global RAW;old=RAW;RAW='/tmp';
+  try:
+    os.replace(tmp,'/tmp/_cell.jpg');return key('_cell')
+  finally:RAW=old
+def strip(name,out,fw=128,fh=104,rows=2,cols=4):
+  src=Image.open(f'{RAW}/{name}.jpg').convert('RGB');W,H=src.size;cw,ch=W//cols,H//rows;cells=[]
+  for r in range(rows):
+    for c in range(cols):
+      m=10;cells.append(keyimg(src.crop((c*cw+m,r*ch+m,(c+1)*cw-m,(r+1)*ch-m))))
+  sc=min(min(fw*.94/x.width,fh*.94/x.height) for x in cells);S=Image.new('RGBA',(fw*len(cells),fh))
+  for i,x in enumerate(cells):
+    x=x.resize((max(1,round(x.width*sc)),max(1,round(x.height*sc))),Image.LANCZOS);S.alpha_composite(x,(i*fw+(fw-x.width)//2,fh-x.height-2))
+  S.save(S_+out+'.png',optimize=True)
+S_=S
+strip('sh_inf_run','run_inf');strip('sh_para_run','run_para');strip('sh_foe_run','run_foe')
+fit(key('crate'),90).save(S+'crate.png',optimize=True)
+print('v5 ok')
