@@ -3,7 +3,7 @@
   "version": "6.0.0",
   "description": "מבצע מדבר 1973: browser RTS (PWA) about the Yom Kippur War",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "start": "node tools/serve.js 8080",
     "test": "node tools/gen-sw.js --check && node --test tests/engine.test.js tests/account.test.js",
