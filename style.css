@@ -112,3 +112,7 @@ footer{text-align:center;padding:30px 16px 60px;border-top:1px solid #3a2f1f;col
 .epi{display:flex;gap:10px;align-items:center;text-align:right;margin:6px 0}.epi img{width:48px;height:48px;border-radius:4px;object-fit:cover;border:2px solid var(--line)}.epi b{display:block;color:var(--gold);font-size:13px}
 .memorial h3{color:var(--gold);margin:4px 0 8px}
 @media (max-width:720px){.bdiff{grid-template-columns:1fr 1fr}}
+
+.ghstar{text-decoration:none;background:var(--gold,#e0b64a)!important;color:#1b1712!important;border-color:var(--gold,#e0b64a)!important;font-weight:700;margin-inline-start:auto}
+.ghstar+#hAcc{margin-inline-start:0}
+footer .xl{margin:6px 0 10px}footer .xl a,#install a{color:var(--gold,#e0b64a)}
